@@ -1,0 +1,23 @@
+test_case_1:
+  name: "Test Case 1"
+  description: "This is a sample test case."
+  endpoint: "http://127.0.0.1:5000/rocket"
+  method: "POST"
+  payload:
+    url: "https://example.com"
+    numRequests: 10
+  concurrent_requests: 10
+  ramp_up_duration: 10
+  timeout: 5
+
+test_case_2:
+  name: "Test Case 2"
+  description: "Another sample test case."
+  endpoint: "http://127.0.0.1:5000/rocket"
+  method: "POST"
+  payload:
+    url: "https://example.com"
+    numRequests: 50
+  concurrent_requests: 5
+  ramp_up_duration: 5
+  timeout: 3

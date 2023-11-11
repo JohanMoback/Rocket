@@ -1,45 +1,55 @@
+import json
+import yaml
 import requests
 import streamlit as st
 import pandas as pd
 
-data = {
-    "url": "https://example.com",
-    "numRequests": 10,
-    "concurrentRequests": 2,
-    "rampUpDuration": 1,
-    "timeout": 5
-}
-
-headers = {
-    "Content-Type": "application/json"
-}
-
-# Define the Streamlit app
-st.title("API Call and Dashboard Visualization")
-
-# Create a button to trigger the API call
 if st.button("Execute API Call"):
-    # Define the API endpoint URL
-    api_endpoint = "http://127.0.0.1:5000/rocket"
+    # Load the YAML file with test cases
+    with open("config.yaml", "r") as config_file:
+        config = yaml.safe_load(config_file)
 
-    # Make the API call
-    response = requests.post(api_endpoint, data=data, headers=headers)
+    responses = {}
 
-    # Check if the API call was successful
-    if response.status_code == 200:
-        st.success("API call successful")
+    # Loop through test cases and execute requests
+    for test_case_name, test_case_params in config.items():
+        endpoint = test_case_params["endpoint"]
+        method = test_case_params.get("method", "POST")
+        payload = test_case_params.get("payload", {})
 
-        # Visualize the response (assuming the response is in JSON format)
-        response_data = response.json()
+        # Make the HTTP request
+        if method == "POST":
+            response = requests.post(endpoint, json=payload)
+        elif method == "GET":
+            response = requests.get(endpoint)
 
-        # Display the response data as a DataFrame
-        response_df = pd.DataFrame(response_data)
-        st.write("Response Data:")
-        st.write(response_df)
+        responses[test_case_name] = {
+            "status_code": response.status_code,
+            "content": response.text
+        }
 
-        # You can add more visualization components here based on your data
+        # Process the response as needed
+        # Check if the API call was successful
+        if response.status_code == 200:
+            st.success("API call successful")
 
-    else:
-        st.error(f"API call failed with status code: {response.status_code}")
-        st.write(response.text)  # Display the response content for error details
+            try:
+                # Try to load the response as JSON
+                response_data = response.json()
 
+                # Check if the response_data is a list or dictionary
+                if isinstance(response_data, (list, dict)):
+                    # Display the response data as a DataFrame
+                    response_df = pd.json_normalize(response_data) if isinstance(response_data, dict) else pd.DataFrame(
+                        response_data)
+                    st.write("Response Data:")
+                    st.write(response_df)
+                else:
+                    st.warning("Response data is not a valid structure for DataFrame.")
+
+            except json.JSONDecodeError:
+                st.warning("Failed to decode JSON response.")
+
+        else:
+            print(f"Test Case: {test_case_name} - Failed (Status Code: {response.status_code})")
+            print(response.text)  # Display response content for error details

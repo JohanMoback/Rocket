@@ -4,6 +4,7 @@ import requests
 import streamlit as st
 import pandas as pd
 import time
+from io import StringIO
 from st_on_hover_tabs import on_hover_tabs
 
 st.set_page_config(layout="wide")
@@ -12,7 +13,6 @@ image_path = "resources/Rocket.png"  # Replace with the path to your image file
 st.image(image_path, use_column_width=False)
 
 
-st.header("Rocket Dashboard")
 st.markdown('<style>' + open('./style.css').read() + '</style>', unsafe_allow_html=True)
 
 
@@ -21,8 +21,8 @@ with st.sidebar:
                          iconName=['dashboard', 'money', 'economy'], default_choice=0)
 
 if tabs =='Dashboard':
-    st.title("Dashboard")
-    st.write('Name of option is {}'.format(tabs))
+    st.title("Rocket Dashboard")
+    #st.write('Name of option is {}'.format(tabs))
 
 elif tabs == 'Collections':
     st.title("Collections")
@@ -32,10 +32,11 @@ elif tabs == 'Admin':
     st.title("Admin")
     st.write('Name of option is {}'.format(tabs))
 
+
 # On button call the API
 if st.button("Execute API Call"):
     # Load the YAML file with test cases
-    with open("config.yaml", "r") as config_file:
+    with open(config, "r") as config_file:
         config = yaml.safe_load(config_file)
 
     responses = []

@@ -9,6 +9,10 @@ test_case_1:
   concurrent_requests: 10
   ramp_up_duration: 10
   timeout: 5
+  testDuration: 60
+  proxy:
+    http: ""
+    https: ""
 
 test_case_2:
   name: "Test Case 2"
@@ -21,3 +25,4 @@ test_case_2:
   concurrent_requests: 5
   ramp_up_duration: 5
   timeout: 3
+  testDuration: 60

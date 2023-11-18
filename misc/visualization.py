@@ -9,11 +9,11 @@ from st_on_hover_tabs import on_hover_tabs
 
 st.set_page_config(layout="wide")
 # Set Rocket image in Streamlit
-image_path = "resources/Rocket.png"  # Replace with the path to your image file
+image_path = "../resources/Rocket.png"  # Replace with the path to your image file
 st.image(image_path, use_column_width=False)
 
 
-st.markdown('<style>' + open('./style.css').read() + '</style>', unsafe_allow_html=True)
+st.markdown('<style>' + open('../streamlit/style.css').read() + '</style>', unsafe_allow_html=True)
 
 
 with st.sidebar:

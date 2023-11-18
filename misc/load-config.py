@@ -1,8 +1,6 @@
 import json
 import yaml
 import requests
-from rocketapi import send_requests
-
 
 # Load the YAML file with test cases
 with open("config.yaml", "r") as config_file:

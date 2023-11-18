@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify
 import time
 import requests
 import concurrent.futures
-import ngrok
 
 app = Flask(__name__)
 @app.route('/rocket', methods=['POST'])
